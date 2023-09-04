@@ -10,7 +10,7 @@ export const Searchbar = ({ onSubmit }) => {
   return (
     <SearchbarHeader onSubmit={onSubmit}>
       <SearchForm>
-        <SearchButton type="submit" class="button">
+        <SearchButton type="submit">
           <SvgSearch />
         </SearchButton>
 

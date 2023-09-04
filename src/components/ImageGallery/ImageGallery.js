@@ -1,12 +1,11 @@
+import { ImageItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import { ListGallery } from './ImageGallery.styled';
 
-export const ImageGallery = ({ images }) => {
+export const ImageGallery = ({ images, onImageClick }) => {
   return (
     <ListGallery>
-      {images.map(({ id, webformatURL }) => (
-        <li key={id}>
-          <img src={webformatURL} alt={id} />
-        </li>
+      {images.map(image => (
+        <ImageItem key={image.id} image={image} onImageClick={onImageClick} />
       ))}
     </ListGallery>
   );
