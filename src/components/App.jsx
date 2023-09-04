@@ -21,14 +21,17 @@ export class App extends Component {
   };
 
   async componentDidUpdate(prevProps, prevState) {
+    const { query, page } = this.state;
     if (
       this.state.query !== prevState.query ||
       this.state.page !== prevState.page
     ) {
       try {
         this.setState({ isLoading: true, error: false });
-        const userQuery = await dataQuery(this.state.query, this.state.page);
-        this.setState({ images: [...prevState.images, ...userQuery.hits] });
+        const userQuery = await dataQuery(query, page);
+        this.setState(prevState => ({
+          images: [...prevState.images, ...userQuery.hits],
+        }));
         console.log(userQuery);
         if (this.state.page === 1) {
           toast.success('Here is was we found for your request.');
@@ -44,10 +47,13 @@ export class App extends Component {
 
   handleSubmit = evt => {
     evt.preventDefault();
-    const userSearch = evt.target.elements.query.value;
+    const userSearch = evt.target.elements.query.value.trim();
+    if (!userSearch) {
+      toast.error('Please enter your request.');
+    }
     this.setState({
       query: userSearch,
-      image: [],
+      images: [],
       page: 1,
     });
     evt.target.reset();
@@ -56,6 +62,7 @@ export class App extends Component {
   handleLoadMore = () => {
     this.setState(prevState => ({
       page: prevState.page + 1,
+      images: [],
     }));
   };
 

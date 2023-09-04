@@ -3,11 +3,11 @@ import { Overlay, ModalWindow } from './Modal.styled';
 
 export class Modal extends Component {
   render() {
-    const { selectedImage, closeModal } = this.props;
+    const { selectedImage, closeModal, tags } = this.props;
     return (
       <Overlay onClick={closeModal}>
         <ModalWindow>
-          <img src={selectedImage} alt="" />
+          <img src={selectedImage} alt={tags} />
         </ModalWindow>
       </Overlay>
     );

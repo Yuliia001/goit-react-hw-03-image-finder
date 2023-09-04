@@ -1,14 +1,14 @@
 import { Image, WrapperItem } from './ImageGalleryItem.styled';
 
 export const ImageItem = ({
-  image: { id, webformatURL, largeImageURL },
+  image: { webformatURL, largeImageURL, tags },
   onImageClick,
 }) => {
   return (
-    <WrapperItem key={id}>
+    <WrapperItem>
       <Image
         src={webformatURL}
-        alt={id}
+        alt={tags}
         onClick={() => onImageClick(largeImageURL)}
       />
     </WrapperItem>
