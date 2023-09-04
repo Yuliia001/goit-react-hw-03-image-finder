@@ -50,6 +50,7 @@ export class App extends Component {
     const userSearch = evt.target.elements.query.value.trim();
     if (!userSearch) {
       toast.error('Please enter your request.');
+      return;
     }
     this.setState({
       query: userSearch,
