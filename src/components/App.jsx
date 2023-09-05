@@ -16,23 +16,20 @@ export class App extends Component {
     page: 1,
     isLoading: false,
     error: false,
-    isModalOpen: false,
-    selectedItem: null,
+    selectedImage: null,
+    totalImages: 0,
   };
 
   async componentDidUpdate(prevProps, prevState) {
     const { query, page } = this.state;
-    if (
-      this.state.query !== prevState.query ||
-      this.state.page !== prevState.page
-    ) {
+    if (query !== prevState.query || page !== prevState.page) {
       try {
         this.setState({ isLoading: true, error: false });
         const userQuery = await dataQuery(query, page);
         this.setState(prevState => ({
           images: [...prevState.images, ...userQuery.hits],
+          totalImages: userQuery.totalHits,
         }));
-        console.log(userQuery);
         if (this.state.page === 1) {
           toast.success('Here is was we found for your request.');
         }
@@ -56,6 +53,7 @@ export class App extends Component {
       query: userSearch,
       images: [],
       page: 1,
+      totalImages: 0,
     });
     evt.target.reset();
   };
@@ -63,20 +61,19 @@ export class App extends Component {
   handleLoadMore = () => {
     this.setState(prevState => ({
       page: prevState.page + 1,
-      images: [],
     }));
   };
 
   openModal = image => {
-    this.setState({ isModalOpen: true, selectedImage: image });
+    this.setState({ selectedImage: image });
   };
 
   closeModal = () => {
-    this.setState({ isModalOpen: false, selectedImage: null });
+    this.setState({ selectedImage: null });
   };
 
   render() {
-    const { images, isLoading, isModalOpen, selectedImage } = this.state;
+    const { images, isLoading, selectedImage, totalImages } = this.state;
     return (
       <Layout>
         <Searchbar onSubmit={this.handleSubmit} />
@@ -84,11 +81,11 @@ export class App extends Component {
         {images.length > 0 && (
           <ImageGallery images={images} onImageClick={this.openModal} />
         )}
-        {images.length > 0 && !isLoading && (
+        {images.length !== totalImages && !isLoading && (
           <Button onClick={this.handleLoadMore} />
         )}
         <Toaster />
-        {isModalOpen && (
+        {selectedImage && (
           <Modal closeModal={this.closeModal} selectedImage={selectedImage} />
         )}
         <GlobalStyle />

@@ -9,15 +9,23 @@ export class Modal extends Component {
   componentWillUnmount() {
     document.removeEventListener('keydown', this.handleKeyDown);
   }
+
   handleKeyDown = e => {
     if (e.code === 'Escape') {
       this.props.closeModal();
     }
   };
+
+  handleOverlayClick = e => {
+    if (e.target === e.currentTarget) {
+      this.props.closeModal();
+    }
+  };
+
   render() {
-    const { selectedImage, closeModal, tags } = this.props;
+    const { selectedImage, tags } = this.props;
     return (
-      <Overlay onClick={closeModal}>
+      <Overlay onClick={this.handleOverlayClick}>
         <ModalWindow>
           <img src={selectedImage} alt={tags} />
         </ModalWindow>
